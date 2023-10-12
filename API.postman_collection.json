@@ -1,0 +1,666 @@
+{
+	"info": {
+		"_postman_id": "484718cb-252c-4035-8f5c-0747375ea1e1",
+		"name": "Inventory records API",
+		"description": "A REST API for employee/manager Admin panel inventory with notifications & access control.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30399486"
+	},
+	"item": [
+		{
+			"name": "Manager Register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/manager/register?name=Username&email=manager@gmail.com&password=987654321OaA&password_confirmation=987654321OaA",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"manager",
+						"register"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Username",
+							"description": "Alpha string with lendth in [1;255]"
+						},
+						{
+							"key": "email",
+							"value": "manager@gmail.com",
+							"description": "New user email"
+						},
+						{
+							"key": "password",
+							"value": "987654321OaA",
+							"description": "User password. Should contain number, lowercase and Uppercase letter. Minimum 8 characters length."
+						},
+						{
+							"key": "password_confirmation",
+							"value": "987654321OaA",
+							"description": "User password confirmation"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Manager Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/manager/login?email=manager@gmail.com&password=987654321OaA",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"manager",
+						"login"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "manager@gmail.com",
+							"description": "User email"
+						},
+						{
+							"key": "password",
+							"value": "987654321OaA",
+							"description": "User password"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Manager Refresh Token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/manager/refresh",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"manager",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Manager Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/manager/logout",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"manager",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee Register",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/employee/register?email=employee@gmail.com&password=987654321OaA",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"employee",
+						"register"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "employee@gmail.com",
+							"description": "New user email"
+						},
+						{
+							"key": "password",
+							"value": "987654321OaA",
+							"description": "User password. Should contain number, lowercase and Uppercase letter. Minimum 8 characters length."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/employee/login?email=employee@gmail.com&password=987654321OaA",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"employee",
+						"login"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "employee@gmail.com",
+							"description": "User email"
+						},
+						{
+							"key": "password",
+							"value": "987654321OaA",
+							"description": "User password"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee Refresh Token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/employee/refresh",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"employee",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/employee/logout",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"employee",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee Records Show",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/employee/1/records",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"employee",
+						"1",
+						"records"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Categories Index",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/categories",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"categories"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Categories Show",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/categories/4",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"categories",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Category Records Show",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/categories/1/records",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"categories",
+						"1",
+						"records"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Record Index",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Record #1",
+							"description": "Record name. String length should be from 3 to 100 characters.",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"description": "Record image file. File mime should be in jpg, png, jpeg, gif, svg.",
+							"type": "file",
+							"src": ""
+						},
+						{
+							"key": "category",
+							"value": "3",
+							"description": "Record category ID",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/records",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"records"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Record Create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Record #1",
+							"description": "Record name. String length should be from 3 to 100 characters.",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"description": "Record image file. File mime should be in jpg, png, jpeg, gif, svg.",
+							"type": "file",
+							"src": "/D:/downloads/cat.png"
+						},
+						{
+							"key": "category",
+							"value": "1",
+							"description": "Record category ID",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/records",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"records"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Record Update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/records/5?name=Row 123&category=2",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"records",
+						"5"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Row 123",
+							"description": "Record name. String length should be from 3 to 100 characters."
+						},
+						{
+							"key": "category",
+							"value": "2",
+							"description": "Record category ID"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Record Show",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Record #1",
+							"description": "Record name. String length should be from 3 to 100 characters.",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"description": "Record image file. File mime should be in jpg, png, jpeg, gif, svg.",
+							"type": "file",
+							"src": "/D:/downloads/cat.png"
+						},
+						{
+							"key": "category",
+							"value": "3",
+							"description": "Record category ID",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/records/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"records",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Record Destroy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Record #1",
+							"description": "Record name. String length should be from 3 to 100 characters.",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"description": "Record image file. File mime should be in jpg, png, jpeg, gif, svg.",
+							"type": "file",
+							"src": "/D:/downloads/cat.png"
+						},
+						{
+							"key": "category",
+							"value": "3",
+							"description": "Record category ID",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/records/4",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"records",
+						"4"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost/api",
+			"type": "string"
+		},
+		{
+			"key": "user_token",
+			"value": "Auth token value",
+			"type": "string"
+		}
+	]
+}
