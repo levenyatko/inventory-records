@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\DTOs\Record\StoreRecordDTO;
+use App\DTOs\Record\UpdateRecordDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\EnsureAllowedToRecord;
 use App\Http\Middleware\IsAuthorOrManager;
@@ -11,8 +13,9 @@ use App\Http\Resources\RecordCollection;
 use App\Http\Resources\RecordResource;
 use App\Models\Record;
 use App\Notifications\CreatedRecordEmployeeNotification;
+use App\Services\Api\RecordService;
+use App\Services\Api\UploadService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 
 class RecordController extends Controller
 {
@@ -20,15 +23,15 @@ class RecordController extends Controller
     {
         $this->middleware(['auth:employer'])->only(['store', 'update', 'show']);
         $this->middleware(['auth:employer,manager'])->only(['index', 'destroy']);
-        $this->middleware([ IsAuthorOrManager::class ])->only(['update', 'show', 'destroy']);
+        $this->middleware([IsAuthorOrManager::class])->only(['update', 'show', 'destroy']);
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(RecordService $service)
     {
-        $records = Auth::user()->records()->paginate();
+        $records = $service->getCurrentUserRecords();
 
         return ( new RecordCollection($records) )->response();
     }
@@ -36,20 +39,13 @@ class RecordController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RecordStoreRequest $request)
+    public function store(RecordStoreRequest $request, RecordService $record_service, UploadService $upload_service)
     {
-        $record = Record::create([
-            'employee_id' => Auth::user()->id,
-            'category_id' => $request->category,
-            'name'        => $request->name,
-        ]);
+        $record = $record_service->storeRecord(StoreRecordDTO::fromRequest($request));
 
         if ( $request->image ) {
-            $img_name = $this->downloadImage($request, $record);
-
-            $record->update([
-                'image' => $img_name
-            ]);
+            $uploaded_image = $upload_service->upload($request->file('image'), $record);
+            $record_service->updateRecordImage($record, $uploaded_image);
         }
 
         Auth::user()->notify( new CreatedRecordEmployeeNotification() );
@@ -58,21 +54,6 @@ class RecordController extends Controller
             'message' => "Record is created successfully.",
             'id'      => $record->id
         ])->setStatusCode(201);
-    }
-
-    private function downloadImage($request, $record)
-    {
-        $images_dir_path = storage_path( 'app/public/images/' );
-
-        if ( ! File::isDirectory($images_dir_path) ) {
-            File::makeDirectory($images_dir_path, 0777, true, true);
-        }
-
-        $img_name = sprintf('images/record-%s.%s', $record->id, $request->image->getClientOriginalExtension());
-
-        $request->file('image')->storeAs('public', $img_name);
-
-        return $img_name;
     }
 
     /**
@@ -86,23 +67,15 @@ class RecordController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(RecordUpdateRequest $request, Record $record)
+    public function update(RecordUpdateRequest $request, Record $record, RecordService $record_service, UploadService $upload_service)
     {
-        $new_data = [];
-
-        if ($request->category) {
-            $new_data['category_id'] = $request->category;
-        }
-
-        if ($request->name) {
-            $new_data['name'] = $request->name;
-        }
-
+        $uploaded_image = null;
         if ( $request->image ) {
-            $new_data['image'] = $this->downloadImage($request, $record);
+            $uploaded_image = $upload_service->upload($request->file('image'), $record);
         }
 
-        $record->update($new_data);
+        $new_record_data = UpdateRecordDTO::fromRequest($request);
+        $record_service->updateRecord($record, $new_record_data, $uploaded_image);
 
         return response()->json([
             'message' => "Record updated.",

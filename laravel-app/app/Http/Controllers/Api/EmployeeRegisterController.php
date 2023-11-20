@@ -2,23 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\DTOs\Employee\RegisterEmployeeDTO;
 use App\Events\EmployeeCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeeRegisterRequest;
-use App\Models\Employee;
 use App\Notifications\WelcomeManagerEmailNotification;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Services\Api\EmployeeService;
 
 class EmployeeRegisterController extends Controller
 {
-    public function __invoke(EmployeeRegisterRequest $request)
+    public function __invoke(EmployeeRegisterRequest $request, EmployeeService $service)
     {
-        $employee = Employee::create([
-            'email'      => $request->email,
-            'password'   => Hash::make( $request->password ),
-            'user_id'    => Auth::user()->id
-        ]);
+        $employee = $service->registerEmployee( RegisterEmployeeDTO::fromRequest( $request ) );
 
         $employee->notify( new WelcomeManagerEmailNotification( $employee ) );
 

@@ -2,20 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\DTOs\Manager\RegisterManagerDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Services\Api\ManagerService;
 
 class ManagerRegisterController extends Controller
 {
-    public function __invoke(RegisterRequest $request)
+    public function __invoke(RegisterRequest $request, ManagerService $service)
     {
-        User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make( $request->password ),
-        ]);
+        $service->registerManager( RegisterManagerDTO::fromRequest( $request ) );
 
         return response()->json([
             'message' => "You are registered. Please, login.",

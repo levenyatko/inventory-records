@@ -7,7 +7,7 @@ use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\RecordCollection;
 use App\Models\Category;
-use Illuminate\Support\Facades\Auth;
+use App\Services\Api\CategoryService;
 
 class CategoryController extends Controller
 {
@@ -16,9 +16,10 @@ class CategoryController extends Controller
         $this->middleware(['auth:employer,manager']);
     }
 
-    public function index()
+    public function index( CategoryService $service )
     {
-        $categories = Category::paginate();
+        $categories = $service->getCategoriesList();
+
         return ( new CategoryCollection($categories) )->response();
     }
 
@@ -27,9 +28,9 @@ class CategoryController extends Controller
         return (new CategoryResource($category))->response();
     }
 
-    public function records(Category $category)
+    public function records(Category $category, CategoryService $service)
     {
-        $records = Auth::user()->records()->where('category_id', $category->id)->paginate();
+        $records = $service->getCategoryRecords($category);
 
         return ( new RecordCollection($records) )->response();
     }
